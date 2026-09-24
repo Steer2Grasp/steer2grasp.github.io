@@ -1,3 +1,17 @@
+/* Steer2Grasp — project page.
+   Layout follows the standard academic project-page template (Bulma).
+   Anonymous submission: no author or affiliation information anywhere. */
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background-color: #ffffff;
+  color: #363636;
+}
+
 body {
   font-family: 'Noto Sans', sans-serif;
 }
@@ -12,115 +26,449 @@ body {
   margin-bottom: 5px;
 }
 
-.dnerf {
-  font-variant: small-caps;
+.publication-title {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: clamp(2.5rem, 6.5vw, 4rem);
+  line-height: 1.1;
 }
 
-.teaser .hero-body {
+.publication-subtitle {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  color: #4a4a4a;
+  font-weight: 400;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.publication-venue {
+  color: #7a7a7a;
+  font-size: 0.95rem;
+  margin-top: 1.25rem;
+}
+
+.publication-links {
+  margin-top: 1.75rem;
+}
+
+.title.is-3,
+.title.is-4 {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+}
+
+.hero.teaser {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+}
+
+.hero.teaser .hero-body {
   padding-top: 0;
   padding-bottom: 3rem;
 }
 
-.teaser {
-  font-family: 'Google Sans', sans-serif;
+.section.is-light {
+  background-color: #fafafa;
 }
 
-.publication-banner {
-  max-height: parent;
+.content p {
+  line-height: 1.7;
 }
 
-.publication-banner video {
-  position: relative;
-  left: auto;
-  top: auto;
-  transform: none;
-  object-fit: fit;
-}
-
-.publication-title {
-  font-family: 'Google Sans', sans-serif;
-}
-
-.publication-authors {
-  font-family: 'Google Sans', sans-serif;
-}
-
-.publication-venue {
-  color: #555;
-  width: fit-content;
-  font-weight: bold;
-}
-
-.publication-awards {
-  color: #ff3860;
-  width: fit-content;
-  font-weight: bolder;
-}
-
-.publication-authors a {
-  color: hsl(204, 86%, 53%) !important;
-}
-
-.publication-authors a:hover {
-  text-decoration: underline;
-}
-
-.author-block {
-  display: inline-block;
-}
-
-.publication-video {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 56.25%;
-  overflow: hidden;
-  border-radius: 10px !important;
-}
-
-.publication-video iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.results-carousel {
-  overflow: hidden;
-}
-
-.results-carousel .item {
-  margin: 5px;
-  overflow: hidden;
-  border: 1px solid #bbb;
-  border-radius: 10px;
-  padding: 0;
-  font-size: 0;
-}
-
-.results-carousel video {
+/* Figures ---------------------------------------------------------------- */
+figure.figure {
   margin: 0;
 }
 
-.interpolation-panel {
+/* The teaser reads fine well below the column width. */
+figure.teaser-figure {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.teaser .figure-caption {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+figure.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.figure-caption {
+  font-size: 0.9rem;
+  color: #5a5a5a;
+  line-height: 1.6;
+  margin-top: 0.85rem;
+}
+
+.figure-caption strong {
+  color: #363636;
+}
+
+/* Equations -------------------------------------------------------------- */
+.equation {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+/* Videos ----------------------------------------------------------------- */
+.video-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.video-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.video-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+@media screen and (max-width: 768px) {
+  .video-grid.cols-2,
+  .video-grid.cols-3 { grid-template-columns: 1fr; }
+}
+
+.video-item video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #f0f0f0;
+}
+
+.video-item .video-label {
+  font-size: 0.88rem;
+  color: #4a4a4a;
+  margin-top: 0.5rem;
+}
+
+.video-item .video-label strong {
+  color: #363636;
+}
+
+.main-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+/* Chapter list under the main video -------------------------------------- */
+.chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.chapters button {
+  cursor: pointer;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  color: #4a4a4a;
+  border-radius: 4px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+}
+
+.chapters button:hover {
+  border-color: #b5b5b5;
   background: #f5f5f5;
-  border-radius: 10px;
 }
 
-.interpolation-panel .interpolation-image {
+.chapters button.is-active {
+  border-color: #363636;
+  background: #363636;
+  color: #fff;
+}
+
+.chapters button .t {
+  font-variant-numeric: tabular-nums;
+  color: #7a7a7a;
+  margin-right: 0.4rem;
+}
+
+.chapters button.is-active .t {
+  color: #dbdbdb;
+}
+
+/* Tabs ------------------------------------------------------------------- */
+.pill-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.pill-tabs button {
+  cursor: pointer;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  color: #4a4a4a;
+  border-radius: 4px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.pill-tabs button:hover { background: #f5f5f5; }
+
+.pill-tabs button.is-active {
+  border-color: #363636;
+  background: #363636;
+  color: #fff;
+}
+
+/* Tables ----------------------------------------------------------------- */
+.table-scroll {
+  overflow-x: auto;
+}
+
+table.results {
+  border-collapse: collapse;
   width: 100%;
-  border-radius: 5px;
+  min-width: 720px;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
 }
 
-.interpolation-panel .slider {
-  margin: 0 !important;
+table.results thead th {
+  font-weight: 600;
+  color: #4a4a4a;
+  padding: 0.5rem 0.6rem;
+  text-align: right;
+  border-bottom: 1px solid #363636;
+  white-space: nowrap;
 }
 
-#interpolation-image-wrapper {
+table.results thead th:first-child { text-align: left; }
+table.results thead th.group { text-align: center; }
+
+table.results tbody td {
+  padding: 0.45rem 0.6rem;
+  text-align: right;
+  border-bottom: 1px solid #ededed;
+}
+
+table.results tbody td:first-child { text-align: left; }
+
+table.results tbody tr.section-row td {
+  font-weight: 600;
+  color: #363636;
+  background: #f5f5f5;
+  text-align: left;
+}
+
+table.results tbody tr.ours td { font-weight: 600; }
+table.results tbody tr.ours td:first-child { color: #1f6f43; }
+
+table.results td.best { color: #1f6f43; font-weight: 700; }
+table.results td.second { color: #9a6b00; }
+
+.table-note {
+  font-size: 0.82rem;
+  color: #5a5a5a;
+  line-height: 1.6;
+  margin-top: 0.75rem;
+}
+
+/* BibTeX ----------------------------------------------------------------- */
+pre.bibtex {
+  background: #f5f5f5;
+  border: 1px solid #ededed;
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+/* Long display equations stay inside the column on narrow screens. */
+@media screen and (max-width: 600px) {
+  .equation mjx-container { font-size: 88% !important; }
+}
+
+/* "2x" marker on the sped-up real-world clips. */
+.video-item {
+  position: relative;
+}
+
+.speed-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.62);
+  color: #ffffff;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+/* Accent colour for the project. */
+a { color: #4285f5; }
+a:hover { color: #2b6fd6; }
+
+.chapters button.is-active {
+  border-color: #4285f5;
+  background: #4285f5;
+  color: #ffffff;
+}
+
+.chapters button.is-active .t { color: #d6e6ff; }
+
+.pill-tabs button.is-active {
+  border-color: #4285f5;
+  background: #4285f5;
+  color: #ffffff;
+}
+
+/* Qualitative comparisons: a horizontal carousel, one failure mode per slide. */
+.carousel {
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  padding: 0 3.25rem;
+}
+
+.carousel-pair {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.carousel-pair video {
+  display: block;
   width: 100%;
+  height: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #f0f0f0;
 }
 
-#interpolation-image-wrapper img {
-  border-radius: 5px;
+.row-caption {
+  margin-top: 0.9rem;
+  font-size: 1.08rem;
+  line-height: 1.5;
+  color: #363636;
+  text-align: center;
+}
+
+.carousel-count {
+  margin-top: 0.45rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #7a7a7a;
+  font-variant-numeric: tabular-nums;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #4285f5;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.2);
+  transition: background 0.15s ease;
+}
+
+.carousel-nav svg {
+  width: 20px;
+  height: 20px;
+}
+
+.carousel-nav:hover:not(:disabled) {
+  background: #2b6fd6;
+}
+
+.carousel-nav:disabled {
+  background: #d5dbe4;
+  box-shadow: none;
+  cursor: default;
+}
+
+.carousel-nav.prev { left: 0; }
+.carousel-nav.next { right: 0; }
+
+@media screen and (max-width: 768px) {
+  .carousel-slide { padding: 0 2.25rem; }
+  .carousel-nav { width: 38px; height: 38px; }
+  .carousel-nav svg { width: 16px; height: 16px; }
+}
+
+/* ---------------------------------------------------------------------------
+   Real World Experiments on narrow screens.
+
+   Stacking six full-width clips makes the section enormous on a phone, so each
+   object's three difficulties become a swipeable strip instead. The next clip
+   peeks in at the edge, which is what signals that the row scrolls.
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  #real-world .video-grid.cols-3 {
+    display: flex;
+    gap: 0.7rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* bleed to the screen edges so the peeking clip is not clipped by padding */
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    padding: 0 0.75rem 0.2rem;
+  }
+
+  #real-world .video-grid.cols-3::-webkit-scrollbar {
+    display: none;
+  }
+
+  #real-world .video-grid.cols-3 > .video-item {
+    flex: 0 0 82%;
+    scroll-snap-align: center;
+  }
+
+  #real-world .title.is-5 {
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+  }
+
+  #real-world .video-item .video-label {
+    font-size: 0.82rem;
+  }
+
+  #real-world .speed-badge {
+    top: 6px;
+    right: 6px;
+    font-size: 0.68rem;
+    padding: 3px 5px;
+  }
 }

@@ -1,33 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="">
-  <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Steer2Grasp: a training-free, embodiment-agnostic framework for inference-time steering of grasp diffusion models using Feynman-Kac particle reweighting and resampling.">
+  <meta name="keywords" content="grasp diffusion, inference-time steering, Feynman-Kac, embodiment-aware grasping, dual-arm grasping, robot manipulation">
   <title>Steer2Grasp: Inference-Time Embodiment-Aware Steering for Diverse Physically Feasible Grasp Diffusion</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  <meta property="og:title" content="Steer2Grasp: Inference-Time Embodiment-Aware Steering for Diverse Physically Feasible Grasp Diffusion">
+  <meta property="og:description" content="A frozen grasp diffusion model steered at inference time toward grasps a specific robot can actually execute.">
+  <meta property="og:image" content="./static/images/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css?v=15">
+  <link rel="icon" type="image/svg+xml" href="./static/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./static/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./static/images/favicon-180.png">
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
 
+<!-- ============================ TITLE ============================ -->
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Steer2Grasp: Inference-Time Embodiment-Aware Steering for Diverse Physically Feasible Grasp Diffusion</h1>
+          <h1 class="title is-1 publication-title">Steer2Grasp</h1>
+          <h2 class="subtitle is-4 publication-subtitle">
+            Inference-Time Embodiment-Aware Steering for Diverse Physically Feasible Grasp Diffusion
+          </h2>
+
+          <p class="publication-venue">
+            Anonymous submission
+          </p>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="./static/paper.pdf" target="_blank" rel="noopener"
+                 class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#video" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-video"></i></span>
+                <span>Video</span>
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ============================ TEASER ============================ -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <figure class="figure teaser-figure">
+        <img src="./static/images/teaser.png?v=2"
+             alt="Steer2Grasp overview: the robot embodiment and the environment signed distance field enter a frozen grasp diffusion model only at inference time, where a reward is calculated, weights are assigned and the particle population is resampled, yielding embodiment-aware grasps.">
+      </figure>
+      <p class="figure-caption has-text-centered">
+        A grasp diffusion model is trained with no knowledge of the robot or the scene.
+        <strong>Steer2Grasp</strong> leaves it frozen and introduces the embodiment and the environment
+        only at sampling time: a deployment reward is evaluated on each particle, the population is
+        reweighted by that reward and resampled, and probability mass moves onto grasp modes the robot
+        can actually reach and execute.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ABSTRACT ============================ -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
@@ -35,6 +94,20 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
+            Current grasp diffusion models provide rich priors for generation, yet their object-centric
+            approach can violate the kinematic and collision constraints imposed by the embodiment and the
+            environment. Existing embodiment-aware methods primarily perform local corrections around
+            generated grasps through gradient guidance or optimization, making it difficult to recover from
+            fundamentally infeasible modes. We present Steer2Grasp, a training-free, embodiment-agnostic
+            framework for inference-time grasp steering that adapts a frozen Cartesian grasp diffusion model
+            using deployment-specific rewards. Through Feynman-Kac (FK) inspired particle reweighting and
+            resampling, the method reallocates population mass from infeasible to high-reward grasp modes,
+            enabling population-level mode transitions without modifying the pretrained diffusion model or
+            requiring differentiable constraints. The framework enables a unified treatment for single and
+            dual arm grasping through reachability and collision aware rewards, followed by gradient free
+            gripper level local refinement. Across diverse objects, robot embodiments, and constrained
+            environments, our method substantially improves feasible grasp generation while maintaining
+            proximity to the underlying grasp prior.
           </p>
         </div>
       </div>
@@ -42,5 +115,532 @@
   </div>
 </section>
 
+<!-- ============================ VIDEO ============================ -->
+<section class="section is-light" id="video">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <h2 class="title is-3 has-text-centered">Video</h2>
+
+        <div class="main-video">
+          <video id="supp-video" controls preload="metadata" playsinline
+                 poster="./static/images/video-poster.jpg">
+            <source src="./static/videos/steer2grasp-supplementary.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div class="chapters">
+          <button data-t="21"><span class="t">0:21</span>Pipeline</button>
+          <button data-t="46"><span class="t">0:46</span>Feasibility recovery</button>
+          <button data-t="65"><span class="t">1:05</span>Limited mode switching</button>
+          <button data-t="81"><span class="t">1:21</span>Proximity to prior</button>
+          <button data-t="150"><span class="t">2:30</span>Single-arm results</button>
+          <button data-t="164"><span class="t">2:44</span>Dual-arm results</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ METHOD ============================ -->
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <div class="content">
+      <!-- <p>
+        Steer2Grasp leaves the pretrained grasp diffusion model frozen and introduces the robot and the
+        scene only while sampling. At a few points along the reverse diffusion we score each particle&rsquo;s
+        Tweedie estimate &mdash; the model&rsquo;s own prediction of the clean grasp &mdash; with a deployment
+        reward built from multi-start IK and signed clearances against the environment and the object.
+        Particles are then reweighted by how much that reward improved and resampled with replacement,
+        which moves probability mass onto feasible grasp modes. The transition kernel itself is never
+        modified, so every surviving trajectory remains a sample path of the learned prior, and the
+        population converges on the prior tilted toward feasibility:
+      </p>
+
+      <div class="equation">
+        $$p^{*} \propto p^{\theta}\exp\!\big(r(H_0;\mathcal{P},\mathcal{R},\mathcal{E})/\tau\big),$$
+      </div>
+
+      <p>
+        where the temperature $\tau$ sets how far the population may drift from $p^{\theta}$. Nothing is
+        retrained, no gradient of the reward is taken, and the constraints never have to be differentiable.
+      </p>
+    </div> -->
+
+    <figure class="figure">
+      <img src="./static/images/method.png"
+           alt="Overview of the proposed method: reverse diffusion produces grasp hypotheses which are mapped to clean grasp estimates, evaluated against deployment-specific feasibility rewards, and used to reweight and resample the particle population.">
+    </figure>
+    <p class="figure-caption">
+      Given an full object point cloud $P$ and a pretrained Cartesian space grasp diffusion model, the reverse diffusion produces grasp hypotheses $H_{t-1}$ which are mapped to their clean grasp estimates $\hat{H}_0(H_t)$ using the Tweedie estimate, which is evaluated against deployment specific feasibility rewards. The resulting reward $\mathbf{r}(\hat{H}_0;P,\mathcal{R},\mathcal{E})$ combine embodiment and environment information through multi-start IK, reachability and signed geometric clearances. These rewards instantiate the Feynman--Kac twisting potential used to re-weight and resample ($\mathbf{H}_{b}$) the particle population in turn removing particles ($\mathbf{H}_{a}$). Thus embodiment and environment constraints act through population level reweighting and resampling rather than modifying individual denoising transitions, enabling mode level steering toward feasible regions while retaining the multi modal structure of the pretrained grasp prior.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ QUALITATIVE COMPARISONS ============================ -->
+<section class="section" id="comparisons">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Qualitative Comparisons</h2>
+    <div class="content has-text-centered">
+      <p>
+        Grasps generated by gradient guidance and by our method in the same scene, executed in MuJoCo.
+      </p>
+    </div>
+
+    <div class="carousel" data-carousel>
+      <button class="carousel-nav prev" type="button" aria-label="Previous comparison"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <div class="carousel-pair">
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-panda-corner.jpg" data-autoplay>
+              <source src="./static/videos/sim/panda-corner.mp4" type="video/mp4">
+            </video>
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-ur5e-tabletop.jpg" data-autoplay>
+              <source src="./static/videos/sim/ur5e-tabletop.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="row-caption">Gradient guidance degrades grasp quality on single-arm grasps.</p>
+        </div>
+        <div class="carousel-slide">
+          <div class="carousel-pair">
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-ur5-dual-stability.jpg" data-autoplay>
+              <source src="./static/videos/sim/ur5-dual-stability.mp4" type="video/mp4">
+            </video>
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-panda-dual-stability.jpg" data-autoplay>
+              <source src="./static/videos/sim/panda-dual-stability.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="row-caption">Gradient guidance degrades grasp quality on dual-arm grasp pairs.</p>
+        </div>
+        <div class="carousel-slide">
+          <div class="carousel-pair">
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-dual-unreachable.jpg" data-autoplay>
+              <source src="./static/videos/sim/dual-unreachable.mp4" type="video/mp4">
+            </video>
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-panda-unreachable.jpg" data-autoplay>
+              <source src="./static/videos/sim/panda-unreachable.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="row-caption">Reachability failure: the guided grasp admits no valid joint configuration.</p>
+        </div>
+        <div class="carousel-slide">
+          <div class="carousel-pair">
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-dual-collision.jpg" data-autoplay>
+              <source src="./static/videos/sim/dual-collision.mp4" type="video/mp4">
+            </video>
+            <video autoplay muted loop playsinline preload="metadata"
+                   poster="./static/images/posters/sim-dual-gripper-collision.jpg" data-autoplay>
+              <source src="./static/videos/sim/dual-gripper-collision.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="row-caption">Collision failure: the guided grasp drives the arm or the gripper into the scene.</p>
+        </div>
+      </div>
+
+      <p class="carousel-count"><span data-carousel-index>1</span> / <span data-carousel-total>4</span></p>
+
+      <button class="carousel-nav next" type="button" aria-label="Next comparison"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REAL WORLD ============================ -->
+<section class="section is-light" id="real-world">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Real World Experiments</h2>
+    <!-- <div class="content">
+      <p>
+        Two RealSense views are fused into an ESDF, grasps are generated and ranked by reward, and the
+        top-ranked candidate is executed with a cuRoboV2 motion plan on xArm7 manipulators. Each object is
+        evaluated in three scenes of increasing difficulty, three trials each. The <em>easy</em> scene tests
+        reachability and ground-collision avoidance, the <em>medium</em> scene constrains the workspace with
+        a corridor-like configuration, and the <em>hard</em> scene combines narrow clearances with restricted
+        approach directions. Clips are shown at 2&times; speed.
+      </p>
+    </div> -->
+
+    <div class="pill-tabs" data-tabs="realworld">
+      <button class="is-active" data-tab="single">Single-arm</button>
+      <button data-tab="dual">Dual-arm</button>
+    </div>
+
+    <div data-panel="realworld" data-value="single">
+      <h3 class="title is-5">Cylinder</h3>
+      <div class="video-grid cols-3" style="margin-bottom:2rem;">
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/cylinder-easy.jpg">
+            <source src="./static/videos/real/cylinder-easy.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Easy</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/cylinder-medium.jpg">
+            <source src="./static/videos/real/cylinder-medium.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Medium</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/cylinder-hard.jpg">
+            <source src="./static/videos/real/cylinder-hard.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Hard</strong> &mdash; 2/3 successful trials</p>
+        </div>
+      </div>
+      <h3 class="title is-5">Bowl</h3>
+      <div class="video-grid cols-3" style="margin-bottom:2rem;">
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bowl-easy.jpg">
+            <source src="./static/videos/real/bowl-easy.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Easy</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bowl-medium.jpg">
+            <source src="./static/videos/real/bowl-medium.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Medium</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bowl-hard.jpg">
+            <source src="./static/videos/real/bowl-hard.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Hard</strong> &mdash; 3/3 successful trials</p>
+        </div>
+      </div>
+    </div>
+
+    <div data-panel="realworld" data-value="dual" hidden>
+      <h3 class="title is-5">Bucket</h3>
+      <div class="video-grid cols-3" style="margin-bottom:2rem;">
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bucket-easy.jpg">
+            <source src="./static/videos/real/bucket-easy.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Easy</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bucket-medium.jpg">
+            <source src="./static/videos/real/bucket-medium.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Medium</strong> &mdash; 2/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/bucket-hard.jpg">
+            <source src="./static/videos/real/bucket-hard.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Hard</strong> &mdash; 1/3 successful trials</p>
+        </div>
+      </div>
+      <h3 class="title is-5">Tray</h3>
+      <div class="video-grid cols-3" style="margin-bottom:2rem;">
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/tray-easy.jpg">
+            <source src="./static/videos/real/tray-easy.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Easy</strong> &mdash; 3/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/tray-medium.jpg">
+            <source src="./static/videos/real/tray-medium.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Medium</strong> &mdash; 2/3 successful trials</p>
+        </div>
+        <div class="video-item">
+          <video autoplay muted loop playsinline preload="metadata" data-autoplay
+                 poster="./static/images/posters/tray-hard.jpg">
+            <source src="./static/videos/real/tray-hard.mp4" type="video/mp4">
+          </video>
+          <span class="speed-badge">2&times;</span>
+          <p class="video-label"><strong>Hard</strong> &mdash; 2/3 successful trials</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="table-note">
+      30 of 36 trials succeed overall. Failures are concentrated on the bucket in the hard setting, due to
+      asymmetric loading and the lack of compliant torque control.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ RESULTS ============================ -->
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+
+    <div class="content">
+      <!-- <h3 class="title is-4">Large-scale scene evaluation</h3> -->
+      <p>
+        We spawn up to four walls around an object and randomise the base position of each Franka Emika
+        Panda, retaining 50 scenes per object that admit at least one executable grasp. Using 18 single-arm
+        and 12 dual-arm objects, this gives 45,000 single-arm grasps and 60,000 dual-arm grasp pairs, all
+        evaluated in MuJoCo. <em>O</em> denotes steering alone and <em>O+LR</em> adds local refinement.
+      </p>
+    </div>
+
+    <div class="table-scroll">
+      <table class="results">
+        <thead>
+          <tr>
+            <th rowspan="2">Method</th>
+            <th rowspan="2">Reach &uarr;</th>
+            <th rowspan="2">Coll &darr;</th>
+            <th class="group" colspan="2">CS &uarr;</th>
+            <th rowspan="2">SR<sub>hold</sub> &uarr;</th>
+            <th class="group" colspan="2">SR<sub>hold</sub> + CS &uarr;</th>
+            <th rowspan="2">Time &darr;</th>
+            <th rowspan="2">VRAM &darr;</th>
+          </tr>
+          <tr>
+            <th class="group">@10</th><th>@all</th>
+            <th class="group">@10</th><th>@all</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="10">Single-arm &mdash; GraspGen prior, Franka Panda</td></tr>
+          <tr><td>Plain sampling</td><td>72.51</td><td>76.24</td><td>40.90</td><td>15.60</td><td>18.44</td><td>24.00</td><td>8.93</td><td>0.34 s</td><td>0.53 GB</td></tr>
+          <tr><td>Rejection filter</td><td>89.50</td><td>71.41</td><td>47.14</td><td>18.81</td><td>22.31</td><td>27.02</td><td>10.78</td><td>+1.12</td><td>+0.00</td></tr>
+          <tr><td>Oversampling (150&rarr;50)</td><td>97.84</td><td>56.88</td><td>60.34</td><td>41.06</td><td>29.77</td><td>34.84</td><td>22.80</td><td>+1.52</td><td>+0.08</td></tr>
+          <tr><td>Gradient guidance</td><td>76.41</td><td>31.52</td><td>69.64</td><td>57.71</td><td>21.51</td><td>32.01</td><td>18.52</td><td>+11.23</td><td>+0.01</td></tr>
+          <tr class="ours"><td>Ours (O)</td><td class="second">98.26</td><td class="second">28.41</td><td class="second">72.99</td><td class="second">70.42</td><td class="second">38.84</td><td class="second">37.84</td><td class="second">38.13</td><td>+3.32</td><td>+0.00</td></tr>
+          <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.43</td><td class="best">26.56</td><td class="best">74.54</td><td class="best">72.41</td><td class="best">41.41</td><td class="best">40.31</td><td class="best">40.79</td><td>+3.72</td><td>+0.31</td></tr>
+
+          <tr class="section-row"><td colspan="10">Dual-arm &mdash; DAGDiff prior, two Panda arms</td></tr>
+          <tr><td>Plain sampling</td><td>40.91</td><td>88.85</td><td>19.55</td><td>4.88</td><td>67.52</td><td>17.17</td><td>4.21</td><td>10.46 s</td><td>1.28 GB</td></tr>
+          <tr><td>Rejection filter</td><td>76.22</td><td>86.30</td><td>20.11</td><td>9.26</td><td>78.05</td><td>17.48</td><td>8.23</td><td>&minus;0.16</td><td>+0.00</td></tr>
+          <tr><td>Oversampling (500&rarr;100)</td><td>78.70</td><td>82.99</td><td>33.92</td><td>14.55</td><td>79.91</td><td>30.30</td><td>12.74</td><td>+14.67</td><td>+1.86</td></tr>
+          <tr><td>Gradient guidance</td><td>61.74</td><td>75.51</td><td>49.07</td><td>15.97</td><td>67.55</td><td>43.43</td><td>12.48</td><td>+175.36</td><td>+1.56</td></tr>
+          <tr class="ours"><td>Ours (O)</td><td class="second">98.57</td><td class="second">49.23</td><td class="best">62.18</td><td class="second">50.77</td><td class="best">85.11</td><td class="best">54.98</td><td class="second">45.03</td><td>+2.43</td><td>+0.00</td></tr>
+          <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.80</td><td class="best">46.47</td><td class="second">61.93</td><td class="best">53.53</td><td class="second">84.64</td><td class="second">54.28</td><td class="best">47.59</td><td>+6.47</td><td>+0.09</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      <strong>Reach</strong> is the reachability rate (IK convergence; for dual-arm both arms must converge).
+      <strong>Coll</strong> is the collision rate. <strong>CS@k</strong> is constraint satisfaction among the
+      top-$k$ ranked grasps per scene. <strong>SR<sub>hold</sub></strong> denotes stability under a 3 N pull
+      along all object-frame axes, and <strong>SR<sub>hold</sub>+CS@all</strong> is what we call feasibility.
+      Time and VRAM are reported as the change relative to plain sampling of the same setting. The rejection
+      filter returns fewer than $N$ grasps per scene on average (35.8 single-arm, 37.3 dual-arm).
+    </p>
+  </div>
+</section>
+
+<!-- ============================ BIBTEX ============================ -->
+<!-- <section class="section is-light" id="bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre class="bibtex">@inproceedings{steer2grasp,
+  title     = {Steer2Grasp: Inference-Time Embodiment-Aware Steering for
+               Diverse Physically Feasible Grasp Diffusion},
+  author    = {Anonymous},
+  booktitle = {Under review},
+  year      = {2027}
+}</pre>
+  </div>
+</section> -->
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p style="font-size: 0.9rem; color: #5a5a5a;">
+            This page layout is based on the
+            <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>
+            project page template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* Page behaviour is inlined on purpose: an external script is one more thing
+   that can be cached stale, blocked or fail to load, and this page should not
+   go inert when that happens. The clips also carry the autoplay attribute, so
+   they play even if none of this runs. */
+(function () {
+  'use strict';
+
+  /* ---- chapter buttons under the main video --------------------------- */
+  var video = document.getElementById('supp-video');
+  var chapterBtns = [].slice.call(document.querySelectorAll('.chapters button'));
+
+  if (video && chapterBtns.length) {
+    var seekTo = function (t) {
+      var apply = function () {
+        try { video.currentTime = t; } catch (e) { /* not seekable yet */ }
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      };
+      if (video.readyState >= 1) { apply(); }
+      else { video.addEventListener('loadedmetadata', apply, { once: true }); }
+
+      /* A server that ignores Range requests cannot seek. Fall back to
+         buffering the file and seeking inside what has arrived. */
+      window.setTimeout(function () {
+        if (Math.abs(video.currentTime - t) < 1.5) return;
+        video.preload = 'auto';
+        var tries = 0;
+        var retry = function () {
+          tries++;
+          try { video.currentTime = t; } catch (e) {}
+          if (tries > 40 || Math.abs(video.currentTime - t) < 1.5) {
+            video.removeEventListener('progress', retry);
+          }
+        };
+        video.addEventListener('progress', retry);
+      }, 400);
+    };
+
+    chapterBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        chapterBtns.forEach(function (o) { o.classList.remove('is-active'); });
+        b.classList.add('is-active');
+        seekTo(parseFloat(b.getAttribute('data-t')));
+      });
+    });
+
+    var markActive = function () {
+      var t = video.currentTime, active = -1;
+      chapterBtns.forEach(function (b, i) {
+        if (parseFloat(b.getAttribute('data-t')) <= t + 0.25) active = i;
+      });
+      chapterBtns.forEach(function (b, i) { b.classList.toggle('is-active', i === active); });
+    };
+    video.addEventListener('timeupdate', markActive);
+    video.addEventListener('seeked', markActive);
+  }
+
+  /* ---- looping result clips ------------------------------------------- */
+  var clips = [].slice.call(document.querySelectorAll('video[data-autoplay]'));
+
+  function shown(v) { return v.offsetParent !== null || v.getClientRects().length > 0; }
+
+  function tryPlay(v) {
+    if (!shown(v)) return;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  /* No control bar, so a click is the way back in if autoplay is refused. */
+  clips.forEach(function (v) {
+    v.addEventListener('click', function () {
+      if (v.paused) tryPlay(v); else v.pause();
+    });
+  });
+
+  if (clips.length && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) tryPlay(e.target);
+        else if (!e.target.paused) e.target.pause();
+      });
+    }, { threshold: 0.2 });
+    clips.forEach(function (v) { io.observe(v); });
+  }
+
+  /* ---- horizontal carousel --------------------------------------------- */
+  [].forEach.call(document.querySelectorAll('[data-carousel]'), function (root) {
+    var track = root.querySelector('.carousel-track');
+    var slide = root.querySelector('.carousel-slide');
+    var prev = root.querySelector('.carousel-nav.prev');
+    var next = root.querySelector('.carousel-nav.next');
+    if (!track || !slide || !prev || !next) return;
+
+    function step(dir) {
+      track.scrollBy({ left: dir * slide.getBoundingClientRect().width, behavior: 'smooth' });
+    }
+    prev.addEventListener('click', function () { step(-1); });
+    next.addEventListener('click', function () { step(1); });
+
+    var index = root.querySelector('[data-carousel-index]');
+    var total = root.querySelector('[data-carousel-total]');
+    var slides = root.querySelectorAll('.carousel-slide');
+    if (total) total.textContent = slides.length;
+
+    /* grey out an arrow once there is nothing further that way, and keep the
+       position counter honest */
+    function sync() {
+      var max = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+      if (index) {
+        var w = slide.getBoundingClientRect().width || 1;
+        var i = Math.min(slides.length, Math.max(1, Math.round(track.scrollLeft / w) + 1));
+        index.textContent = i;
+      }
+    }
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  });
+
+  /* ---- tab groups ------------------------------------------------------ */
+  [].forEach.call(document.querySelectorAll('[data-tabs]'), function (group) {
+    var name = group.getAttribute('data-tabs');
+    [].forEach.call(group.querySelectorAll('button'), function (btn) {
+      btn.addEventListener('click', function () {
+        [].forEach.call(group.querySelectorAll('button'), function (b) {
+          b.classList.remove('is-active');
+        });
+        btn.classList.add('is-active');
+
+        var val = btn.getAttribute('data-tab');
+        var panels = document.querySelectorAll('[data-panel="' + name + '"]');
+        [].forEach.call(panels, function (p) {
+          p.hidden = p.getAttribute('data-value') !== val;
+          if (p.hidden) {
+            [].forEach.call(p.querySelectorAll('video'), function (v) {
+              if (!v.paused) v.pause();
+            });
+          }
+        });
+        window.requestAnimationFrame(function () {
+          [].forEach.call(panels, function (p) {
+            if (p.hidden) return;
+            [].forEach.call(p.querySelectorAll('video[data-autoplay]'), tryPlay);
+          });
+        });
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>
