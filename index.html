@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=15">
+  <link rel="stylesheet" href="./static/css/index.css?v=25">
   <link rel="icon" type="image/svg+xml" href="./static/images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="./static/images/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./static/images/favicon-180.png">
@@ -402,7 +402,6 @@
     <h2 class="title is-3 has-text-centered">Results</h2>
 
     <div class="content">
-      <!-- <h3 class="title is-4">Large-scale scene evaluation</h3> -->
       <p>
         We spawn up to four walls around an object and randomise the base position of each Franka Emika
         Panda, retaining 50 scenes per object that admit at least one executable grasp. Using 18 single-arm
@@ -410,54 +409,300 @@
         evaluated in MuJoCo. <em>O</em> denotes steering alone and <em>O+LR</em> adds local refinement.
       </p>
     </div>
+<!-- 
+    <div class="kpi-row">
+      <div class="stat-tile">
+        <span class="stat-label">Feasible and stable, single-arm</span>
+        <span class="stat-value">40.8<span class="stat-unit">%</span></span>
+        <span class="stat-delta up">+31.9pp vs plain sampling</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-label">Feasible and stable, dual-arm</span>
+        <span class="stat-value">47.6<span class="stat-unit">%</span></span>
+        <span class="stat-delta up">+43.4pp vs plain sampling</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-label">Added latency, dual-arm</span>
+        <span class="stat-value">+2.4<span class="stat-unit">s</span></span>
+        <span class="stat-delta">gradient guidance costs +175.4s</span>
+      </div>
+    </div> -->
 
-    <div class="table-scroll">
-      <table class="results">
-        <thead>
-          <tr>
-            <th rowspan="2">Method</th>
-            <th rowspan="2">Reach &uarr;</th>
-            <th rowspan="2">Coll &darr;</th>
-            <th class="group" colspan="2">CS &uarr;</th>
-            <th rowspan="2">SR<sub>hold</sub> &uarr;</th>
-            <th class="group" colspan="2">SR<sub>hold</sub> + CS &uarr;</th>
-            <th rowspan="2">Time &darr;</th>
-            <th rowspan="2">VRAM &darr;</th>
-          </tr>
-          <tr>
-            <th class="group">@10</th><th>@all</th>
-            <th class="group">@10</th><th>@all</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="section-row"><td colspan="10">Single-arm &mdash; GraspGen prior, Franka Panda</td></tr>
-          <tr><td>Plain sampling</td><td>72.51</td><td>76.24</td><td>40.90</td><td>15.60</td><td>18.44</td><td>24.00</td><td>8.93</td><td>0.34 s</td><td>0.53 GB</td></tr>
-          <tr><td>Rejection filter</td><td>89.50</td><td>71.41</td><td>47.14</td><td>18.81</td><td>22.31</td><td>27.02</td><td>10.78</td><td>+1.12</td><td>+0.00</td></tr>
-          <tr><td>Oversampling (150&rarr;50)</td><td>97.84</td><td>56.88</td><td>60.34</td><td>41.06</td><td>29.77</td><td>34.84</td><td>22.80</td><td>+1.52</td><td>+0.08</td></tr>
-          <tr><td>Gradient guidance</td><td>76.41</td><td>31.52</td><td>69.64</td><td>57.71</td><td>21.51</td><td>32.01</td><td>18.52</td><td>+11.23</td><td>+0.01</td></tr>
-          <tr class="ours"><td>Ours (O)</td><td class="second">98.26</td><td class="second">28.41</td><td class="second">72.99</td><td class="second">70.42</td><td class="second">38.84</td><td class="second">37.84</td><td class="second">38.13</td><td>+3.32</td><td>+0.00</td></tr>
-          <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.43</td><td class="best">26.56</td><td class="best">74.54</td><td class="best">72.41</td><td class="best">41.41</td><td class="best">40.31</td><td class="best">40.79</td><td>+3.72</td><td>+0.31</td></tr>
+    <div class="chart-matrix">
+      <div class="col-head" data-arm="single">Single-arm <span>GraspGen prior</span></div>
+      <div class="col-head" data-arm="dual">Dual-arm <span>DAGDiff prior</span></div>
 
-          <tr class="section-row"><td colspan="10">Dual-arm &mdash; DAGDiff prior, two Panda arms</td></tr>
-          <tr><td>Plain sampling</td><td>40.91</td><td>88.85</td><td>19.55</td><td>4.88</td><td>67.52</td><td>17.17</td><td>4.21</td><td>10.46 s</td><td>1.28 GB</td></tr>
-          <tr><td>Rejection filter</td><td>76.22</td><td>86.30</td><td>20.11</td><td>9.26</td><td>78.05</td><td>17.48</td><td>8.23</td><td>&minus;0.16</td><td>+0.00</td></tr>
-          <tr><td>Oversampling (500&rarr;100)</td><td>78.70</td><td>82.99</td><td>33.92</td><td>14.55</td><td>79.91</td><td>30.30</td><td>12.74</td><td>+14.67</td><td>+1.86</td></tr>
-          <tr><td>Gradient guidance</td><td>61.74</td><td>75.51</td><td>49.07</td><td>15.97</td><td>67.55</td><td>43.43</td><td>12.48</td><td>+175.36</td><td>+1.56</td></tr>
-          <tr class="ours"><td>Ours (O)</td><td class="second">98.57</td><td class="second">49.23</td><td class="best">62.18</td><td class="second">50.77</td><td class="best">85.11</td><td class="best">54.98</td><td class="second">45.03</td><td>+2.43</td><td>+0.00</td></tr>
-          <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.80</td><td class="best">46.47</td><td class="second">61.93</td><td class="best">53.53</td><td class="second">84.64</td><td class="second">54.28</td><td class="best">47.59</td><td>+6.47</td><td>+0.09</td></tr>
-        </tbody>
-      </table>
+      <div class="row-head">
+        <h4>Reachability vs collision rate <span class="dir">better ↖</span></h4>
+        <p>Both must hold: a valid joint configuration <em>and</em> an arm that clears the scene.</p>
+      </div>
+      <div class="cell" data-arm="single">
+        <span class="cell-label">Single-arm</span>
+        <svg class="scatter" viewBox="0 0 470 350" role="img" data-row="constraints" data-arm="single"
+             aria-label="Reachability against collision rate, single-arm. Our method reaches the top-left."></svg>
+      </div>
+      <div class="cell" data-arm="dual">
+        <span class="cell-label">Dual-arm</span>
+        <svg class="scatter" viewBox="0 0 470 350" role="img" data-row="constraints" data-arm="dual"
+             aria-label="Reachability against collision rate, dual-arm. Our method reaches the top-left."></svg>
+      </div>
+
+      <div class="row-head">
+        <h4>Feasible vs stability <span class="dir">better ↗</span></h4>
+        <p>Clearing both constraints makes a grasp feasible; it still has to survive the pull test.</p>
+      </div>
+      <div class="cell" data-arm="single">
+        <span class="cell-label">Single-arm</span>
+        <svg class="scatter" viewBox="0 0 470 350" role="img" data-row="outcome" data-arm="single"
+             aria-label="Feasible against stability, single-arm. Our method reaches the top-right."></svg>
+      </div>
+      <div class="cell" data-arm="dual">
+        <span class="cell-label">Dual-arm</span>
+        <svg class="scatter" viewBox="0 0 470 350" role="img" data-row="outcome" data-arm="dual"
+             aria-label="Feasible against stability, dual-arm. Our method reaches the top-right."></svg>
+      </div>
     </div>
-    <p class="table-note">
-      <strong>Reach</strong> is the reachability rate (IK convergence; for dual-arm both arms must converge).
-      <strong>Coll</strong> is the collision rate. <strong>CS@k</strong> is constraint satisfaction among the
-      top-$k$ ranked grasps per scene. <strong>SR<sub>hold</sub></strong> denotes stability under a 3 N pull
-      along all object-frame axes, and <strong>SR<sub>hold</sub>+CS@all</strong> is what we call feasibility.
-      Time and VRAM are reported as the change relative to plain sampling of the same setting. The rejection
-      filter returns fewer than $N$ grasps per scene on average (35.8 single-arm, 37.3 dual-arm).
+
+    <div class="chart-legend">
+      <span class="key"><i class="dot ours"></i>Ours</span>
+      <span class="key"><i class="dot base"></i>Baselines</span>
+    </div>
+
+    <p class="figure-caption">
+      <strong>Large-scale scene evaluation.</strong> <em>Top row</em>: A grasp needs a valid joint configuration and a collision-free arm. Satisfying
+      both makes it <em>feasible</em>. <em>Bottom row</em>: feasible against <em>stability</em>, whether the
+      grasp still holds the object under a 3&nbsp;N pull along every object-frame axis. 
     </p>
+
+    <div class="table-view">
+      <button type="button" class="table-toggle" id="results-table-toggle" aria-expanded="false" aria-controls="results-table">
+        Show all numbers
+      </button>
+      <div id="results-table" hidden>
+  <div class="table-scroll">
+        <table class="results">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2">Reach &uarr;</th>
+              <th rowspan="2">Coll &darr;</th>
+              <th class="group" colspan="2">CS &uarr;</th>
+              <th rowspan="2">SR<sub>hold</sub> &uarr;</th>
+              <th class="group" colspan="2">SR<sub>hold</sub> + CS &uarr;</th>
+              <th rowspan="2">Time &darr;</th>
+              <th rowspan="2">VRAM &darr;</th>
+            </tr>
+            <tr>
+              <th class="group">@10</th><th>@all</th>
+              <th class="group">@10</th><th>@all</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-row"><td colspan="10">Single-arm &mdash; GraspGen prior, Franka Panda</td></tr>
+            <tr><td>Plain sampling</td><td>72.51</td><td>76.24</td><td>40.90</td><td>15.60</td><td>18.44</td><td>24.00</td><td>8.93</td><td>0.34 s</td><td>0.53 GB</td></tr>
+            <tr><td>Rejection filter</td><td>89.50</td><td>71.41</td><td>47.14</td><td>18.81</td><td>22.31</td><td>27.02</td><td>10.78</td><td>+1.12</td><td>+0.00</td></tr>
+            <tr><td>Oversampling (150&rarr;50)</td><td>97.84</td><td>56.88</td><td>60.34</td><td>41.06</td><td>29.77</td><td>34.84</td><td>22.80</td><td>+1.52</td><td>+0.08</td></tr>
+            <tr><td>Gradient guidance</td><td>76.41</td><td>31.52</td><td>69.64</td><td>57.71</td><td>21.51</td><td>32.01</td><td>18.52</td><td>+11.23</td><td>+0.01</td></tr>
+            <tr class="ours"><td>Ours (O)</td><td class="second">98.26</td><td class="second">28.41</td><td class="second">72.99</td><td class="second">70.42</td><td class="second">38.84</td><td class="second">37.84</td><td class="second">38.13</td><td>+3.32</td><td>+0.00</td></tr>
+            <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.43</td><td class="best">26.56</td><td class="best">74.54</td><td class="best">72.41</td><td class="best">41.41</td><td class="best">40.31</td><td class="best">40.79</td><td>+3.72</td><td>+0.31</td></tr>
+
+            <tr class="section-row"><td colspan="10">Dual-arm &mdash; DAGDiff prior, two Panda arms</td></tr>
+            <tr><td>Plain sampling</td><td>40.91</td><td>88.85</td><td>19.55</td><td>4.88</td><td>67.52</td><td>17.17</td><td>4.21</td><td>10.46 s</td><td>1.28 GB</td></tr>
+            <tr><td>Rejection filter</td><td>76.22</td><td>86.30</td><td>20.11</td><td>9.26</td><td>78.05</td><td>17.48</td><td>8.23</td><td>&minus;0.16</td><td>+0.00</td></tr>
+            <tr><td>Oversampling (500&rarr;100)</td><td>78.70</td><td>82.99</td><td>33.92</td><td>14.55</td><td>79.91</td><td>30.30</td><td>12.74</td><td>+14.67</td><td>+1.86</td></tr>
+            <tr><td>Gradient guidance</td><td>61.74</td><td>75.51</td><td>49.07</td><td>15.97</td><td>67.55</td><td>43.43</td><td>12.48</td><td>+175.36</td><td>+1.56</td></tr>
+            <tr class="ours"><td>Ours (O)</td><td class="second">98.57</td><td class="second">49.23</td><td class="best">62.18</td><td class="second">50.77</td><td class="best">85.11</td><td class="best">54.98</td><td class="second">45.03</td><td>+2.43</td><td>+0.00</td></tr>
+            <tr class="ours"><td>Ours (O + LR)</td><td class="best">98.80</td><td class="best">46.47</td><td class="second">61.93</td><td class="best">53.53</td><td class="second">84.64</td><td class="second">54.28</td><td class="best">47.59</td><td>+6.47</td><td>+0.09</td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="table-note">
+          <strong>Reach</strong> is the reachability rate (IK convergence; for dual-arm both arms must
+          converge). <strong>CS@k</strong> is constraint satisfaction among the top-$k$ ranked grasps per
+          scene, <strong>SR<sub>hold</sub></strong> is stability under the pull test, and
+          <strong>SR<sub>hold</sub>+CS@all</strong> is what we plot above as feasibility. Time and VRAM are
+          reported as the change relative to plain sampling of the same setting.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+/* Results scatters — a two-level decomposition of the headline metric.
+     row 1: reachability x collision rate   -> both satisfied = FEASIBLE (CS)
+     row 2: feasible x stability            -> both satisfied = the headline
+   Nothing is plotted against a quantity that contains it, so no correlation is
+   baked into the axes. Scales are shared across the two panels of a row, so the
+   single-arm and dual-arm settings are directly comparable.
+
+   Emphasis encoding: ours in the accent, baselines in de-emphasis gray
+   (validated: CVD dE 17.7 normal / 18.0 protan, contrast >= 3:1). */
+(function () {
+  'use strict';
+
+  var ACCENT = '#4285f5', BASE = '#6b7280';
+  /* both columns rest on the same tint; the column hover only darkens the
+     background behind the plot, so the ring colour stays fixed */
+  var SURFACE = '#f2f5fa';
+  var GRID = '#d9e0ea', AXIS = '#c9d2de';
+
+  /* pos1 / pos2 = label placement in row 1 / row 2 */
+  var SINGLE = [
+    { n: 'Plain sampling',    reach: 72.51, coll: 76.24, cs: 15.60, hold: 18.44, both: 8.93,  time: '0.34 s (base)', ours: false, pos1: 'below', pos2: 'below' },
+    { n: 'Rejection filter',  reach: 89.50, coll: 71.41, cs: 18.81, hold: 22.31, both: 10.78, time: '+1.12 s',       ours: false, pos1: 'above', pos2: 'above' },
+    { n: 'Oversampling',      reach: 97.84, coll: 56.88, cs: 41.06, hold: 29.77, both: 22.80, time: '+1.52 s',       ours: false, pos1: 'above', pos2: 'right' },
+    { n: 'Gradient guidance', reach: 76.41, coll: 31.52, cs: 57.71, hold: 21.51, both: 18.52, time: '+11.23 s',      ours: false, pos1: 'below', pos2: 'right' },
+    { n: 'Ours',              reach: 98.26, coll: 28.41, cs: 70.42, hold: 38.84, both: 38.13, time: '+3.32 s',       ours: true,  pos1: 'below', pos2: 'below' },
+    { n: 'Ours + LR',         reach: 98.43, coll: 26.56, cs: 72.41, hold: 41.41, both: 40.79, time: '+3.72 s',       ours: true,  pos1: 'above', pos2: 'above' }
+  ];
+  var DUAL = [
+    { n: 'Plain sampling',    reach: 40.91, coll: 88.85, cs: 4.88,  hold: 67.52, both: 4.21,  time: '10.46 s (base)', ours: false, pos1: 'left',  pos2: 'left' },
+    { n: 'Rejection filter',  reach: 76.22, coll: 86.30, cs: 9.26,  hold: 78.05, both: 8.23,  time: '−0.16 s',   ours: false, pos1: 'left',  pos2: 'right' },
+    { n: 'Oversampling',      reach: 78.70, coll: 82.99, cs: 14.55, hold: 79.91, both: 12.74, time: '+14.67 s',       ours: false, pos1: 'above', pos2: 'above' },
+    { n: 'Gradient guidance', reach: 61.74, coll: 75.51, cs: 15.97, hold: 67.55, both: 12.48, time: '+175.36 s',      ours: false, pos1: 'left',  pos2: 'left'  },
+    { n: 'Ours',              reach: 98.57, coll: 49.23, cs: 50.77, hold: 85.11, both: 45.03, time: '+2.43 s',        ours: true,  pos1: 'below', pos2: 'left'  },
+    { n: 'Ours + LR',         reach: 98.80, coll: 46.47, cs: 53.53, hold: 84.64, both: 47.59, time: '+6.47 s',        ours: true,  pos1: 'above', pos2: 'above' }
+  ];
+
+  var ROWS = [
+    { row: 'constraints', pos: 'pos1',
+      x: { k: 'coll',  lab: 'Collision rate (%)  ↓', dom: [20, 95],  ticks: [20, 40, 60, 80] },
+      y: { k: 'reach', lab: 'Reachability (%)  ↑',   dom: [35, 101], ticks: [40, 60, 80, 100] } },
+    { row: 'outcome', pos: 'pos2',
+      x: { k: 'hold', lab: 'Stability (%)  ↑', dom: [10, 95], ticks: [20, 40, 60, 80] },
+      y: { k: 'cs',   lab: 'Feasible (%)  ↑',  dom: [0, 80],  ticks: [0, 20, 40, 60, 80] } }
+  ];
+
+  var W = 470, H = 350, M = { t: 24, r: 18, b: 46, l: 50 };
+  var PW = W - M.l - M.r, PH = H - M.t - M.b;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function el(name, attrs) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  var tip = document.createElement('div');
+  tip.className = 'chart-tooltip';
+  tip.hidden = true;
+  document.body.appendChild(tip);
+
+  function showTip(p, evt) {
+    tip.replaceChildren();
+    var name = document.createElement('div');
+    name.className = 'tt-name';
+    name.textContent = p.n;                       /* labels are data: no innerHTML */
+    tip.appendChild(name);
+    [['Reachability', p.reach.toFixed(1) + '%', 0],
+     ['Collision rate', p.coll.toFixed(1) + '%', 0],
+     ['Feasible', p.cs.toFixed(1) + '%', 0],
+     ['Stability', p.hold.toFixed(1) + '%', 0],
+     ['Feasible and stable', p.both.toFixed(1) + '%', 1],
+     ['Added time', p.time, 0]].forEach(function (r) {
+      var row = document.createElement('div');
+      row.className = 'tt-row' + (r[2] ? ' tt-lead' : '');
+      var k = document.createElement('span');
+      k.className = 'tt-key';
+      k.textContent = r[0];
+      var v = document.createElement('strong');
+      v.textContent = r[1];
+      row.appendChild(k); row.appendChild(v);
+      tip.appendChild(row);
+    });
+    tip.hidden = false;
+    var pad = 14, x = evt.clientX + pad, y = evt.clientY + pad;
+    var box = tip.getBoundingClientRect();
+    if (x + box.width > window.innerWidth - 8) x = evt.clientX - box.width - pad;
+    if (y + box.height > window.innerHeight - 8) y = evt.clientY - box.height - pad;
+    tip.style.left = (x + window.scrollX) + 'px';
+    tip.style.top = (y + window.scrollY) + 'px';
+  }
+  function hideTip() { tip.hidden = true; }
+
+  function draw(svg, pts, row) {
+    var xd = row.x.dom, yd = row.y.dom;
+    var sx = function (v) { return M.l + (v - xd[0]) / (xd[1] - xd[0]) * PW; };
+    var sy = function (v) { return M.t + (1 - (v - yd[0]) / (yd[1] - yd[0])) * PH; };
+
+    svg.replaceChildren();
+
+    row.y.ticks.forEach(function (v) {
+      svg.appendChild(el('line', { x1: M.l, x2: M.l + PW, y1: sy(v), y2: sy(v), stroke: GRID, 'stroke-width': 1 }));
+      var t = el('text', { x: M.l - 10, y: sy(v) + 4, 'text-anchor': 'end', class: 'ax' });
+      t.textContent = v;
+      svg.appendChild(t);
+    });
+    row.x.ticks.forEach(function (v) {
+      var t = el('text', { x: sx(v), y: M.t + PH + 20, 'text-anchor': 'middle', class: 'ax' });
+      t.textContent = v;
+      svg.appendChild(t);
+    });
+    svg.appendChild(el('line', { x1: M.l, x2: M.l + PW, y1: M.t + PH, y2: M.t + PH, stroke: AXIS, 'stroke-width': 1 }));
+
+    var xl = el('text', { x: M.l + PW / 2, y: H - 8, 'text-anchor': 'middle', class: 'axtitle' });
+    xl.textContent = row.x.lab;
+    svg.appendChild(xl);
+    var yl = el('text', { x: 14, y: M.t + PH / 2, 'text-anchor': 'middle', class: 'axtitle',
+                          transform: 'rotate(-90 14 ' + (M.t + PH / 2) + ')' });
+    yl.textContent = row.y.lab;
+    svg.appendChild(yl);
+
+    pts.forEach(function (p) {
+      var cx = sx(p[row.x.k]), cy = sy(p[row.y.k]);
+      var pos = p[row.pos];
+      var dot = el('circle', { cx: cx, cy: cy, r: 7, fill: p.ours ? ACCENT : BASE,
+                               stroke: SURFACE, 'stroke-width': 2 });
+      svg.appendChild(dot);
+
+      var side = pos === 'left' || pos === 'right';
+      var lab = el('text', {
+        x: pos === 'left' ? cx - 14 : pos === 'right' ? cx + 14 : cx,
+        y: side ? cy + 4 : (pos === 'above' ? cy - 15 : cy + 24),
+        'text-anchor': pos === 'left' ? 'end' : pos === 'right' ? 'start' : 'middle',
+        class: 'plab' + (p.ours ? ' ours' : '')
+      });
+      lab.textContent = p.n;
+      svg.appendChild(lab);
+
+      var hit = el('circle', { cx: cx, cy: cy, r: 16, fill: 'transparent', tabindex: '0',
+                               role: 'img', 'aria-label': p.n + ': ' + p.reach.toFixed(1) +
+                               '% reachable, ' + p.coll.toFixed(1) + '% collisions, ' +
+                               p.cs.toFixed(1) + '% feasible, ' + p.hold.toFixed(1) + '% stable' });
+      hit.style.cursor = 'pointer';
+      hit.addEventListener('pointermove', function (ev) { dot.setAttribute('r', 8.5); showTip(p, ev); });
+      hit.addEventListener('pointerleave', function () { dot.setAttribute('r', 7); hideTip(); });
+      hit.addEventListener('focus', function () {
+        dot.setAttribute('r', 8.5);
+        var b = dot.getBoundingClientRect();
+        showTip(p, { clientX: b.left + b.width / 2, clientY: b.top });
+      });
+      hit.addEventListener('blur', function () { dot.setAttribute('r', 7); hideTip(); });
+      svg.appendChild(hit);
+    });
+  }
+
+  ROWS.forEach(function (row) {
+    var one = document.querySelector('svg.scatter[data-row="' + row.row + '"][data-arm="single"]');
+    var two = document.querySelector('svg.scatter[data-row="' + row.row + '"][data-arm="dual"]');
+    if (one) draw(one, SINGLE, row);
+    if (two) draw(two, DUAL, row);
+  });
+
+  /* table view — every plotted value is reachable without hovering */
+  var btn = document.getElementById('results-table-toggle');
+  var panel = document.getElementById('results-table');
+  if (btn && panel) {
+    btn.addEventListener('click', function () {
+      var open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Hide all numbers' : 'Show all numbers';
+    });
+  }
+})();
+</script>
 
 <!-- ============================ BIBTEX ============================ -->
 <!-- <section class="section is-light" id="bibtex">

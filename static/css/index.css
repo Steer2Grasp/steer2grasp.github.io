@@ -472,3 +472,269 @@ a:hover { color: #2b6fd6; }
     padding: 3px 5px;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Results: KPI tiles + the feasibility/collision scatter.
+   Emphasis encoding — ours in the accent, baselines in de-emphasis gray.
+   --------------------------------------------------------------------------- */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin: 1.75rem 0 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .kpi-row { grid-template-columns: 1fr; gap: 0.6rem; }
+}
+
+.stat-tile {
+  border: 1px solid #e6e9ee;
+  border-radius: 6px;
+  padding: 0.85rem 1rem 0.95rem;
+  background: #fff;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.83rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #363636;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.stat-unit {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-left: 1px;
+}
+
+.stat-delta {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.stat-delta.up { color: #1f7a4d; }
+
+/* The four panels are a labelled matrix: arm setting across the columns,
+   question down the rows, so neither label has to repeat per chart. */
+.chart-matrix {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.25rem;
+  align-items: start;
+}
+
+.col-head {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #363636;
+  text-align: center;
+  padding-bottom: 0.5rem;
+}
+
+.col-head span {
+  font-weight: 400;
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-left: 0.25rem;
+}
+
+.row-head {
+  grid-column: 1 / -1;
+  border-top: 1px solid #e6e9ee;
+  padding: 0.9rem 0 0.2rem;
+}
+
+.row-head h4 {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #363636;
+  margin: 0;
+}
+
+.row-head p {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* the cue belongs beside the question it applies to, not off at the margin */
+.row-head .dir {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+  background: #e8edf5;
+  color: #55607a;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  vertical-align: 0.08em;
+}
+
+.cell {
+  min-width: 0;
+  border-radius: 7px;
+  padding: 0.5rem 0.55rem 0.35rem;
+}
+
+/* A neutral band separates the two settings down the whole column. It stays
+   neutral on purpose: blue already means "ours" in the marks, so a hued tint
+   would read as a second data encoding. */
+.col-head[data-arm],
+.cell[data-arm] {
+  background: #f2f5fa;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Hovering anywhere in a column brings the whole column forward and names it
+   in the accent, so the two settings stay distinguishable without permanently
+   banding one of them darker than the other. */
+.chart-matrix:has([data-arm="single"]:hover) [data-arm="single"],
+.chart-matrix:has([data-arm="dual"]:hover) [data-arm="dual"] {
+  background: #e4eaf4;
+}
+
+.chart-matrix:has([data-arm="single"]:hover) .col-head[data-arm="single"],
+.chart-matrix:has([data-arm="dual"]:hover) .col-head[data-arm="dual"],
+.chart-matrix:has([data-arm="single"]:hover) .cell[data-arm="single"] .cell-label,
+.chart-matrix:has([data-arm="dual"]:hover) .cell[data-arm="dual"] .cell-label {
+  color: #4285f5;
+}
+
+.col-head {
+  border-radius: 7px 7px 0 0;
+  padding: 0.55rem 0.55rem 0.5rem;
+  margin-bottom: 0;
+}
+
+.cell-label {
+  display: none;
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #4a4a4a;
+  margin-bottom: 0.2rem;
+}
+
+@media screen and (max-width: 768px) {
+  /* stacked, so the columns need vertical separation the column-gap cannot give */
+  .chart-matrix {
+    grid-template-columns: 1fr;
+    row-gap: 0.85rem;
+  }
+
+  .col-head { display: none; }
+  .cell-label { display: block; }
+  .row-head { padding-top: 0.5rem; }
+}
+
+svg.scatter {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+svg.scatter .ax {
+  font-size: 11px;
+  fill: #6b7280;
+  font-variant-numeric: tabular-nums;
+}
+
+svg.scatter .axtitle { font-size: 11.5px; fill: #6b7280; }
+svg.scatter .plab { font-size: 11.5px; fill: #4a4a4a; }
+svg.scatter .plab.ours { fill: #363636; font-weight: 600; }
+svg.scatter .better { font-size: 10.5px; fill: #aab1bd; }
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  margin-top: 0.6rem;
+  font-size: 0.86rem;
+  color: #4a4a4a;
+}
+
+.chart-legend .key { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+.chart-legend .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chart-legend .dot.ours { background: #4285f5; }
+.chart-legend .dot.base { background: #6b7280; }
+.chart-legend .key-note { color: #8a919e; font-style: italic; }
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 60;
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid #dfe3ea;
+  border-radius: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.82rem;
+  min-width: 170px;
+}
+
+.chart-tooltip .tt-name {
+  font-weight: 600;
+  color: #363636;
+  margin-bottom: 0.3rem;
+}
+
+.chart-tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  line-height: 1.6;
+}
+
+.chart-tooltip .tt-key { color: #6b7280; }
+.chart-tooltip .tt-row strong { color: #363636; font-variant-numeric: tabular-nums; }
+
+.table-view { margin-top: 1.75rem; text-align: center; }
+
+.table-toggle {
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  color: #4a4a4a;
+  border-radius: 4px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.87rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.table-toggle:hover { background: #f5f5f5; border-color: #b5b5b5; }
+.table-view > div { margin-top: 1rem; text-align: left; }
+
+/* the composite metric leads in the tooltip, above a hairline */
+.chart-tooltip .tt-row.tt-lead {
+  border-top: 1px solid #edeff3;
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+
